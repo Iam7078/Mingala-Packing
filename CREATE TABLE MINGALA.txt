@@ -1,0 +1,54 @@
+CREATE TABLE tb_packing (
+    id_packing VARCHAR(255) PRIMARY KEY,
+    id_carton VARCHAR(255) NOT NULL,
+    qty_carton INT NOT NULL,
+    date DATE DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE carton_mingala (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_carton VARCHAR(20) NOT NULL,
+    nomor_carton INT NOT NULL,
+    qty_per_carton INT NOT NULL
+);
+
+CREATE TABLE carton_detail (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_carton VARCHAR(20) NOT NULL,
+    id_item VARCHAR(20) NOT NULL,
+    qty INT NOT NULL,
+    status INT NOT NULL
+);
+
+CREATE TABLE item_mingala (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_item VARCHAR(20) NOT NULL,
+    style VARCHAR(255) NOT NULL,
+    color VARCHAR(255) NOT NULL,
+    size VARCHAR(50) NOT NULL,
+    qty INT NOT NULL,
+    mo VARCHAR(255) NOT NULL,
+    date_wh DATE NOT NULL
+);
+
+CREATE TABLE stock_item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_item VARCHAR(20) NOT NULL,
+    qty INT NOT NULL,
+    date DATE NOT NULL
+);
+
+CREATE TABLE stock_item_detail (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_item VARCHAR(20) NOT NULL,
+    qty INT NOT NULL,
+    date DATE NOT NULL
+);
+
+CREATE TABLE user_mingala (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
