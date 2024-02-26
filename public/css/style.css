@@ -190,3 +190,33 @@
 .card-order:hover {
   background-color: #eaecf4;
 }
+
+.tabel-packageditem td:nth-child(1),
+.tabel-packageditem th:nth-child(1),
+.tabel-packageditem td:nth-child(4),
+.tabel-packageditem th:nth-child(4),
+.tabel-packageditem td:nth-child(6),
+.tabel-packageditem th:nth-child(6),
+.tabel-packageditem td:nth-child(7),
+.tabel-packageditem th:nth-child(7),
+.tabel-packageditem td:nth-child(8),
+.tabel-packageditem th:nth-child(8),
+.tabel-packageditem td:nth-child(9),
+.tabel-packageditem th:nth-child(9)  {
+  text-align: center;
+}
+
+.tabel-packingtoday td:nth-child(1),
+.tabel-packingtoday th:nth-child(1),
+.tabel-packingtoday td:nth-child(3),
+.tabel-packingtoday th:nth-child(3),
+.tabel-packingtoday td:nth-child(4),
+.tabel-packingtoday th:nth-child(4),
+.tabel-packingtoday td:nth-child(7),
+.tabel-packingtoday th:nth-child(7),
+.tabel-packingtoday td:nth-child(9),
+.tabel-packingtoday th:nth-child(9),
+.tabel-packingtoday td:nth-child(10),
+.tabel-packingtoday th:nth-child(10) {
+  text-align: center;
+}

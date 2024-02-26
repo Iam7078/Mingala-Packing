@@ -8,54 +8,31 @@
         <div class="card-body">
             <div class="row mb-1">
                 <div class="col-md-10">
-                    <h1 class="h3 mb-2 text-gray-800 mr-2">Details Qty Item Ordered</h1>
-                </div>
-                <div class="col-md-2">
-                    <a class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" id="btn-order-report" style="float: right;"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Order Report</a>
+                    <h1 class="h3 mb-2 text-gray-800 mr-2">Details of Packaged Items</h1>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-10">
-                    <h1 class="h6 mb-2 text-gray-800">Total Qty Order : <?= $totalQtyOrder ? $totalQtyOrder : '0'; ?></h1>
+                    <h1 class="h6 mb-2 text-gray-800">Total Packaged Items : <?= $totalQtyPacking ? $totalQtyPacking : '0'; ?></h1>
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-sm tabel-detail-order" id="dataTable" width="100%"
+                <table class="table table-bordered table-sm tabel-packageditem" id="dataTable" width="100%"
                     cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>ID Item</th>
                             <th>Style</th>
                             <th>MO</th>
-                            <th>Qty Total Order</th>
-                            <th>Action</th>
+                            <th>Color</th>
+                            <th>Size</th>
+                            <th>Qty Order</th>
+                            <th>Qty Packing</th>
+                            <th>WIP</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $item = array_reverse($item); ?>
-                        <?php $counter = 1; ?>
-                        <?php foreach ($item as $item): ?>
-                            <tr>
-                                <td>
-                                    <?= $counter; ?>
-                                </td>
-                                <td>
-                                    <?= $item['style']; ?>
-                                </td>
-                                <td>
-                                    <?= $item['mo']; ?>
-                                </td>
-                                <td>
-                                    <?= $item['total_qty']; ?>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-link font-24 view-button"
-                                        data-style="<?= $item['style']; ?>"><i class="fas fa-file"></i> Details</button>
-                                </td>
-                            </tr>
-                            <?php $counter++; ?>
-                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -108,7 +85,7 @@
 <script src="<?= base_url() ?>vendor/sweet/sweet2.js"></script>
 
 <script src="<?= base_url() ?>mingalaJs/sidebar_view.js"></script>
-<script src="<?= base_url() ?>mingalaJs/total_qty_order_dash_view.js"></script>
+<script src="<?= base_url() ?>mingalaJs/dash_detail_item_packing_view.js"></script>
 
 <script>
     function toggleClasses() {

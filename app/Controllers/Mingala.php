@@ -52,6 +52,12 @@ class Mingala extends BaseController
             return $this->getDataDashHariIni($data);
         } elseif ($segment === 'DaToIt') {
             return $this->getDataDetailItemOrder($data);
+        } elseif ($segment === 'DaPaIt') {
+            return $this->getDataPackagedItem($data);
+        } elseif ($segment === 'DaPaTo') {
+            return $this->getDataPackingToday($data);
+        } elseif ($segment === 'DaToPa') {
+            return $this->getDataTotalPacking($data);
         } elseif ($segment === 'ScSi') {
             return view('scan_stock_in');
         } elseif ($segment === 'ScPa') {
@@ -156,6 +162,8 @@ class Mingala extends BaseController
     public function getDataDetailItemOrder($data)
     {
         $itemModel = new ItemModel();
+
+        $data['totalQtyOrder'] = $itemModel->getTotalQty();
 
         $data['item'] = $itemModel->select('style, MAX(mo) as mo, SUM(qty) as total_qty')
             ->groupBy('style')
@@ -312,6 +320,70 @@ class Mingala extends BaseController
         $writer->save('php://output');
         exit();
     }
+    public function getDataPackagedItem($data)
+    {
+        $packingModel = new PackingModel();
+        $data['totalQtyPacking'] = $packingModel->getTotalQtyPacking();
+
+        return view('dash_detail_item_packing', $data);
+    }
+    public function dataTabelPackagedItem()
+    {
+        $itemModel = new ItemModel();
+        $cartonDetailModel = new CartonDetailModel();
+
+        $dataItems = $cartonDetailModel->where('status', 1)->findAll();
+
+        $data = [];
+        $qtyByIdItem = [];
+
+        foreach ($dataItems as $item) {
+            $idItem = $item['id_item'];
+            $qty = $item['qty'];
+
+            if (!array_key_exists($idItem, $qtyByIdItem)) {
+                $qtyByIdItem[$idItem] = $qty;
+            } else {
+                $qtyByIdItem[$idItem] += $qty;
+            }
+        }
+
+        foreach ($qtyByIdItem as $idItem => $totalQty) {
+            $dataItem = $itemModel->where('id_item', $idItem)->first();
+            $data[] = [
+                'id_item' => $idItem,
+                'style' => $dataItem['style'],
+                'mo' => $dataItem['mo'],
+                'color' => $dataItem['color'],
+                'size' => $dataItem['size'],
+                'qty_order' => $dataItem['qty'],
+                'qty' => $totalQty,
+                'wip' => ($dataItem['qty']-$totalQty),
+            ];
+        }
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+    public function getDataPackingToday($data)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $formattedDate = date("Y-m-d");
+        $todayFormatted = date("d F Y", strtotime($formattedDate));
+        $packingModel = new PackingModel();
+        $data['packingg'] = $packingModel->where('date', $formattedDate)->findAll();
+        $data['totalPackingHariIni'] = count($data['packingg']);
+        $data['date'] = $todayFormatted;
+
+        return view('dash_detail_packing_today', $data);
+    }
+    public function getDataTotalPacking($data)
+    {
+        $packingModel = new PackingModel();
+        $data['packingg'] = $packingModel->findAll();
+        $data['totalPacking'] = $packingModel->getTotalPacking();
+        return view('dash_detail_total_packing', $data);
+    }
+
     // Dashboard Doneee
 
 
@@ -489,7 +561,8 @@ class Mingala extends BaseController
         $deleted5 = $stockModel->delete($request->id_item);
         $deleted6 = $stockItemDetailDeleteModel->delete($request->id_item);
 
-        if (($request->cekPac == 1 && $deleted && $deleted2 && $deleted3) || ($request->cekCar == 1 && $deleted2 && $deleted3) || (!$request->cekPac && !$request->cekCar && $deleted4 && $deleted5 && $deleted6)
+        if (
+            ($request->cekPac == 1 && $deleted && $deleted2 && $deleted3) || ($request->cekCar == 1 && $deleted2 && $deleted3) || (!$request->cekPac && !$request->cekCar && $deleted4 && $deleted5 && $deleted6)
         ) {
             return $this->response->setJSON(['success' => true, 'message' => 'Item berhasil dihapus']);
         } else {
@@ -1110,7 +1183,7 @@ class Mingala extends BaseController
         $data = [
             'qty' => $request->qty,
         ];
-        
+
         $data2 = [
             'qty' => $request->qty_detail,
         ];
@@ -1342,7 +1415,7 @@ class Mingala extends BaseController
         $noUrut = 1;
         $column = 6;
         foreach ($dataPacking as $key => $value) {
-            if ($status == 1){
+            if ($status == 1) {
                 $detailPacking = $packingModel->where('id_packing', $value['id_packing'])->first();
             } else {
                 $detailPacking = $packingModel->where('id_packing', $value[1])->first();

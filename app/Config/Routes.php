@@ -13,6 +13,8 @@ $routes->get('/logout-user', 'Mingala::logout');
 // DashBoard
 $routes->get('/get-data-order-by-style', 'Mingala::getDataOrderByStyle');
 $routes->get('/get-order-report', 'Mingala::getOrderReport');
+$routes->get('/data-packaged-item', 'Mingala::dataTabelPackagedItem');
+$routes->get('/data-packing-today', 'Mingala::dataTabelPackingToday');
 //
 
 //Master Item
