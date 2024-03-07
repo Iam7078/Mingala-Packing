@@ -358,7 +358,7 @@ class Mingala extends BaseController
                 'size' => $dataItem['size'],
                 'qty_order' => $dataItem['qty'],
                 'qty' => $totalQty,
-                'wip' => ($dataItem['qty']-$totalQty),
+                'wip' => ($dataItem['qty'] - $totalQty),
             ];
         }
 
@@ -696,6 +696,8 @@ class Mingala extends BaseController
         $cartonModel = new CartonModel();
         $cartonDetailModel = new CartonDetailModel();
         $cartonDetailEditModel = new CartonDetailEditModel();
+        $packingModel = new PackingModel();
+
         $idItem = $request->id_item;
         $qtyAwal = $request->qty;
 
@@ -716,6 +718,19 @@ class Mingala extends BaseController
         $data2 = [
             'qty_per_carton' => $request->qty_per_carton,
         ];
+
+        $data3 = [
+            'qty_carton' => $request->qty_per_carton,
+        ];
+
+        $packingData = $packingModel->where('id_carton', $request->id_carton)->first();
+        if ($packingData) {
+            $idPacking = $packingData['id_packing'];
+            $packingUpdated = $packingModel->update($idPacking, $data3);
+            if (!$packingUpdated) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Gagal memperbarui packing data']);
+            }
+        }
 
         $updated = $cartonModel->update($request->id_carton, $data2);
         $updated2 = $cartonDetailEditModel->update($request->id_key, $data);
